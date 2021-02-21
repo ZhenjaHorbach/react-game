@@ -1,0 +1,11 @@
+.menu {
+	margin:0 auto;
+	width:400px;
+}
+.name{
+	text-align: center;
+}
+.menuList{
+	display: flex;
+	flex-direction: column;
+}

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
+import Menu from "../components/Menu";
+
 function Main(props) {
   const [photo, setPhoto] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sizeBoard, setSizeBoard] = useState(20);
   const [randomCards, setRandomCards] = useState(Array(sizeBoard).fill(null));
-  const [visibilityBoard, setVisibilityBoard] = useState(false);
-  const [visibilityMenu, setVisibilityMenu] = useState(true);
-  const [topic, setTopic] = useState("animal");
+  const [visibilityBoard, setVisibilityBoard] = useState(true);
+  const [visibilityMenu, setVisibilityMenu] = useState(false);
+  const [topic, setTopic] = useState("apple");
 
   const randomElements = () => {
     const newCards = randomCards
@@ -16,7 +18,7 @@ function Main(props) {
     setRandomCards(newCards);
   };
 
-  const getGoods = (topic) => {
+  const getImg = (topic) => {
     fetch(`https://api.pexels.com/v1/search?query=${topic}`, {
       headers: {
         Authorization:
@@ -30,17 +32,23 @@ function Main(props) {
       });
   };
 
-  useState(() => {
-    randomElements(sizeBoard);
-  }, []);
+  useEffect(() => {
+    setVisibilityBoard(!visibilityBoard);
+    setVisibilityMenu(!visibilityMenu);
+  }, [props.callBack]);
 
-  useEffect(() => getGoods(topic), []);
+  useEffect(() => randomElements(sizeBoard), []);
+
+  useEffect(() => getImg(topic), []);
+
   return (
     <main className="main">
       {loading ? (
         <h2>loading</h2>
-      ) : (
+      ) : visibilityBoard ? (
         <Board randomCards={randomCards} photo={photo} />
+      ) : (
+        <Menu />
       )}
     </main>
   );
