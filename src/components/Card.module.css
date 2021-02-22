@@ -7,15 +7,30 @@
 	position: relative;
 	border-radius: 30px;
 	cursor: pointer;
-	background-color: red;
+	background-color: blue;
 	transform: rotateY(0deg);
 
 }
+.card_body_elementFind{
+	pointer-events: none;
+	opacity: 0.5;
+	background: #CCC;
+}
 .card_name{
 	position: absolute;
+	opacity: 0;
 }
 .card_image{
 	width: 100%;
 	height: 100%;
 	border-radius: 30px;
+	z-index: 10;
+	opacity: 0;
+	transition: 0.5s ease all;
+}
+
+.card_image_active{
+	opacity: 1;
+	pointer-events: none;
+	
 }
