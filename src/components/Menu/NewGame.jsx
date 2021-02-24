@@ -1,7 +1,10 @@
+import React, { useState } from "react";
 function NewGame(props) {
   return (
     <div>
-      <h1>New Game</h1>
+      <button onClick={props.createNewGame}>One Player</button>
+      <button>Two Player</button>
+      <button>Player vs Computer</button>
     </div>
   );
 }
