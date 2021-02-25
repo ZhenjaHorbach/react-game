@@ -16,7 +16,6 @@ const topicList = {
 
 function Settings(props) {
   const colorCard = props.backgroundColor.slice(4, -1).split(",");
-  console.log(colorCard);
   const [numberCards, setNumberCards] = useState(props.sizeBoard / 2);
   const [radiusCards, setRadiusCards] = useState(props.formCard);
   const [redColor, setRedColor] = useState(+colorCard[0]);

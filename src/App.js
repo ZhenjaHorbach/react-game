@@ -5,12 +5,24 @@ import Footer from "./layout/Footer";
 
 function App() {
   const [callBack, setCallBack] = useState();
+  const [music, setMusic] = useState();
+  const [loading, setLoading] = useState(true);
 
   return (
-    <div className="App">
-      <Header setCallBack={setCallBack} />
-      <Main callBack={callBack} />
-      <Footer />
+    <div>
+      {loading ? (
+        <Main callBack={callBack} setMusic={setMusic} setLoading={setLoading} />
+      ) : (
+        <div className="App">
+          <Header setCallBack={setCallBack} music={music} />
+          <Main
+            callBack={callBack}
+            setMusic={setMusic}
+            setLoading={setLoading}
+          />
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }

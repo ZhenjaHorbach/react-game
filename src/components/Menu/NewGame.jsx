@@ -3,7 +3,7 @@ function NewGame(props) {
   return (
     <div>
       <button onClick={props.createNewGame}>One Player</button>
-      <button>Two Player</button>
+      <button>Two Players</button>
       <button>Player vs Computer</button>
     </div>
   );

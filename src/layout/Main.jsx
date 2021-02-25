@@ -6,6 +6,7 @@ import Score from "../components/Score";
 function Main(props) {
   //Logic
   const [photo, setPhoto] = useState([]);
+  const [music, setMusic] = useState([]);
   const [loading, setLoading] = useState(true);
   const [randomCards, setRandomCards] = useState([]);
   const [visibilityBoard, setVisibilityBoard] = useState(true);
@@ -62,7 +63,32 @@ function Main(props) {
       .then((response) => response.json())
       .then((data) => {
         data.photos && setPhoto(data.photos);
+      });
+  };
+  const getMusic = () => {
+    setLoading(true);
+    fetch(
+      "https://shazam.p.rapidapi.com/songs/list-recommendations?key=484129036&locale=ru-Ru",
+      {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key":
+            "1e457c88a4mshabbc50cca20af83p17dc77jsnaa01861a874f",
+          "x-rapidapi-host": "shazam.p.rapidapi.com",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        data.tracks && setMusic(data.tracks);
+        return data.tracks;
+      })
+      .then((data) => {
         setLoading(false);
+        setTimeout(() => {
+          props.setMusic(data);
+          props.setLoading(false);
+        });
       });
   };
 
@@ -118,6 +144,8 @@ function Main(props) {
   useEffect(() => createNewGame(), [newSettings]);
 
   useEffect(() => getImg(topic), []);
+
+  useEffect(() => getMusic(), []);
 
   return (
     <main className="main">
