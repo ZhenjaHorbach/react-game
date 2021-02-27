@@ -11,12 +11,22 @@ function Header(props) {
         <h1>Memory game</h1>
       </div>
       <div className={style.volume}>
-        <Volume music={props.music} />
+        <Volume
+          music={props.music}
+          setClick={props.setClick}
+          setVolumeClick={props.setVolumeClick}
+        />
       </div>
-      <div className={style.menu}>
-        <button onClick={() => setclickMB(!clickMB)}>Menu</button>
+      <div className={style.menu}></div>
+      <div className={style.language}>
+        <button onClick={() => props.setLang("russian")}>Russian</button>
+        <button onClick={() => props.setLang("english")}>English</button>
+        <button onClick={() => props.setLang("german")}>German</button>
+        <button onClick={() => props.setLang("italian")}>Italian</button>
+        <button onClick={() => props.setLang("belorussian")}>
+          Belorussian
+        </button>
       </div>
-      <div className={style.language}>language</div>
     </header>
   );
 }

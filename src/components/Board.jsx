@@ -10,6 +10,8 @@ function Board(props) {
     <div className={style.board}>
       {randomCards.map((el, index) => (
         <Card
+          click={props.click}
+          volumeClick={props.volumeClick}
           key={`${photo[el].id}${index}`}
           number={el}
           photo={photo[el]}

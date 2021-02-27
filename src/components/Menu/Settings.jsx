@@ -31,10 +31,17 @@ function Settings(props) {
     props.setBackgroundColor(`rgb(${redColor},${greenColor},${blueColor})`);
     props.setFormCard(+radiusCards);
     props.setSizeBoard(+numberCards * 2);
-    props.setTopic("animal");
     props.setNewSettings(true);
     props.setTopic(topicName);
     props.setBackgroundGradient(backgroundImg);
+    localStorage.setItem(
+      "backgroundColor",
+      `rgb(${redColor},${greenColor},${blueColor})`
+    );
+    localStorage.setItem("formCard", +radiusCards);
+    localStorage.setItem("sizeBoard", +numberCards * 2);
+    localStorage.setItem("topic", topicName);
+    localStorage.setItem("backgroundImg", backgroundImg);
   };
 
   const colorNow = {

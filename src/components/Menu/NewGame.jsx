@@ -2,8 +2,13 @@ import React, { useState } from "react";
 function NewGame(props) {
   return (
     <div>
-      <button onClick={props.createNewGame}>One Player</button>
-      <button>Two Players</button>
+      <button
+        onClick={() => {
+          props.createNewGame("ng");
+        }}
+      >
+        One Player
+      </button>
       <button>Player vs Computer</button>
     </div>
   );

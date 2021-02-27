@@ -4,113 +4,156 @@ import Menu from "../components/Menu";
 import Score from "../components/Score";
 
 function Main(props) {
+  const saveArray = JSON.parse(localStorage.getItem("randomCards")) || [];
+
   //Logic
-  const [photo, setPhoto] = useState([]);
-  const [music, setMusic] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [randomCards, setRandomCards] = useState([]);
+  const [saveGames, setSaveGames] = useState(
+    JSON.parse(localStorage.getItem("saveGames")) || []
+  );
+  const [randomCards, setRandomCards] = useState(saveArray);
   const [visibilityBoard, setVisibilityBoard] = useState(true);
-  const [visibilityMenu, setVisibilityMenu] = useState(false);
   const [activeCard, setActiveCard] = useState([]);
-  const [findCard, setFindCard] = useState([]);
+  const [findCard, setFindCard] = useState(
+    JSON.parse(localStorage.getItem("findCard")) || []
+  );
 
   //Settings
-  const [sizeBoard, setSizeBoard] = useState(10);
-  const [topic, setTopic] = useState("animal");
-  const [backgroundGradient, setBackgroundGradient] = useState("one");
-  const [backgroundColor, setBackgroundColor] = useState("rgb(122,122,122)");
-  const [formCard, setFormCard] = useState(0);
+  const [sizeBoard, setSizeBoard] = useState(
+    +localStorage.getItem("sizeBoard") || 10
+  );
+  const [backgroundGradient, setBackgroundGradient] = useState(
+    localStorage.getItem("backgroundGradient") || "one"
+  );
+  const [backgroundColor, setBackgroundColor] = useState(
+    localStorage.getItem("backgroundColor") || "rgb(122,122,122)"
+  );
+  const [formCard, setFormCard] = useState(
+    localStorage.getItem("formCard") || 0
+  );
   const [newSettings, setNewSettings] = useState(false);
 
   //Score
-  const [scoreMove, setScoreMove] = useState(0);
-  const [timeMove, setTimeMove] = useState(0);
-  const timeMoveRef = useRef(0);
+  const [scoreMove, setScoreMove] = useState(
+    +localStorage.getItem("scoreMove") + 1 || 0
+  );
+  const [timeMove, setTimeMove] = useState(
+    localStorage.getItem("timeMove") || 0
+  );
+  const timeMoveRef = useRef(+localStorage.getItem("timeMove") || 0);
   const timeBody = useRef(null);
 
   //WinGame
   const [winGame, setWinGame] = useState(false);
 
-  const randomElements = (size) => {
+  const randomElements = (size, load) => {
     const newCards = Array(size)
       .fill(null)
       .map((_, index) => Math.ceil((index + 1) / 2))
       .sort(() => Math.random() - 0.5);
-    setRandomCards(newCards);
+
+    const array = JSON.parse(localStorage.getItem("randomCards"));
+    if (load) {
+      setRandomCards(newCards);
+      localStorage.setItem("randomCards", JSON.stringify(newCards));
+    } else {
+      if (array === null || array.length === 0) {
+        setRandomCards(newCards);
+        localStorage.setItem("randomCards", JSON.stringify(newCards));
+      } else {
+        setRandomCards(array);
+        localStorage.setItem("randomCards", JSON.stringify(array));
+      }
+    }
   };
 
-  const createNewGame = () => {
-    getImg(topic);
-    randomElements(sizeBoard);
+  const createNewGame = (args) => {
+    if (newSettings || args === "ng") {
+      props.getImg(props.topic);
+      randomElements(sizeBoard, true);
+      setVisibilityBoard(true);
+      setFindCard([]);
+      setScoreMove(0);
+      setTimeMove(0);
+      timeMoveRef.current = 0;
+      setWinGame(false);
+      setNewSettings(false);
+      localStorage.setItem("findCard", JSON.stringify([]));
+    }
+  };
+  const deleteSave = (index) => {
+    const newSave = saveGames.filter((_, indexEl) => {
+      return index !== indexEl;
+    });
+    setSaveGames(newSave);
+    localStorage.setItem("saveGames", JSON.stringify(newSave));
+  };
+  const loadGame = (index) => {
+    props.getImg(saveGames[index].topic);
+    setRandomCards(saveGames[index].randomCards);
     setVisibilityBoard(true);
-    setVisibilityMenu(false);
-    setFindCard([]);
-    setScoreMove(0);
-    setTimeMove(0);
-    timeMoveRef.current = 0;
+    setFindCard(saveGames[index].findCards);
+    setScoreMove(saveGames[index].scoreMove);
+    setTimeMove(saveGames[index].timeMove);
+    timeMoveRef.current = saveGames[index].timeMove;
     setWinGame(false);
     setNewSettings(false);
+    setBackgroundGradient(saveGames[index].backgroundGradient);
+    setBackgroundColor(saveGames[index].backgroundColor);
+    setFormCard(saveGames[index].formCard);
+    setTimeout(() => {
+      localStorage.setItem(
+        "randomCards",
+        JSON.stringify(saveGames[index].randomCards)
+      );
+      localStorage.setItem("timeMove", timeMoveRef.current);
+      localStorage.setItem(
+        "findCard",
+        JSON.stringify(saveGames[index].findCards)
+      );
+      localStorage.setItem("scoreMove", scoreMove);
+      localStorage.setItem("topic", saveGames[index].topic);
+      localStorage.setItem("formCard", saveGames[index].formCard);
+      localStorage.setItem("backgroundColor", saveGames[index].backgroundColor);
+      localStorage.setItem(
+        "backgroundGradient",
+        saveGames[index].backgroundGradient
+      );
+    }, 100);
   };
 
-  const getImg = (topic) => {
-    setLoading(true);
-    fetch(`https://api.pexels.com/v1/search?query=${topic}`, {
-      headers: {
-        Authorization:
-          "563492ad6f917000010000016b056dce0fdf4c658a743a4b7a818706",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        data.photos && setPhoto(data.photos);
-      });
+  const saveGame = () => {
+    const nowArray = saveGames;
+    const nowSave = {
+      randomCards: randomCards,
+      findCards: findCard,
+      sizeBoard: sizeBoard,
+      backgroundGradient: backgroundGradient,
+      backgroundColor: backgroundColor,
+      formCard: formCard,
+      scoreMove: scoreMove,
+      timeMove: timeMove,
+      topic: props.topic,
+    };
+    nowArray.push(nowSave);
+    setSaveGames(nowArray);
+    localStorage.setItem("saveGames", JSON.stringify(nowArray));
   };
-  const getMusic = () => {
-    setLoading(true);
-    fetch(
-      "https://shazam.p.rapidapi.com/songs/list-recommendations?key=484129036&locale=ru-Ru",
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key":
-            "1e457c88a4mshabbc50cca20af83p17dc77jsnaa01861a874f",
-          "x-rapidapi-host": "shazam.p.rapidapi.com",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        data.tracks && setMusic(data.tracks);
-        return data.tracks;
-      })
-      .then((data) => {
-        setLoading(false);
-        setTimeout(() => {
-          props.setMusic(data);
-          props.setLoading(false);
-        });
-      });
-  };
-
   const changeTimer = () => {
     clearInterval(timeBody.current);
     if (visibilityBoard) {
       timeBody.current = setInterval(() => {
         timeMoveRef.current = timeMoveRef.current + 1;
         setTimeMove(timeMoveRef.current);
+        localStorage.setItem("timeMove", timeMoveRef.current);
       }, 1000);
     } else {
       timeBody.current = setInterval(() => {
         timeMoveRef.current = timeMoveRef.current + 0;
         setTimeMove(timeMoveRef.current);
+        localStorage.setItem("timeMove", timeMoveRef.current);
       }, 1000);
     }
   };
-
-  useEffect(() => {
-    setVisibilityBoard(!visibilityBoard);
-    setVisibilityMenu(!visibilityMenu);
-  }, [props.callBack]);
 
   useEffect(() => {
     if (activeCard.length >= 2) {
@@ -120,6 +163,8 @@ function Main(props) {
           setFindCard(newArray);
           setActiveCard([]);
           setScoreMove(scoreMove + 1);
+          localStorage.setItem("findCard", JSON.stringify(newArray));
+          localStorage.setItem("scoreMove", scoreMove);
         }, 500);
         if ((findCard.length + 1) * 2 === sizeBoard) {
           setTimeout(() => {
@@ -130,12 +175,13 @@ function Main(props) {
         setTimeout(() => {
           setActiveCard([]);
           setScoreMove(scoreMove + 1);
+          localStorage.setItem("scoreMove", scoreMove);
         }, 500);
       }
     }
   }, [activeCard]);
 
-  useEffect(() => randomElements(sizeBoard), []);
+  useEffect(() => randomElements(+sizeBoard, false), []);
 
   useEffect(() => changeTimer(), []);
 
@@ -143,30 +189,31 @@ function Main(props) {
 
   useEffect(() => createNewGame(), [newSettings]);
 
-  useEffect(() => getImg(topic), []);
-
-  useEffect(() => getMusic(), []);
-
   return (
     <main className="main">
       <Score scoreMove={scoreMove} timeMove={timeMove} />
-      {loading ? (
-        <h2>loading</h2>
-      ) : visibilityBoard ? (
+      <button onClick={() => setVisibilityBoard(!visibilityBoard)}>
+        {!visibilityBoard ? "Board" : "Menu"}
+      </button>
+      {visibilityBoard ? (
         <Board
           randomCards={randomCards}
-          photo={photo}
+          photo={props.photo}
           setActiveCard={setActiveCard}
           activeCard={activeCard}
           findCard={findCard}
           backgroundColor={backgroundColor}
           backgroundGradient={backgroundGradient}
           formCard={formCard}
+          click={props.click}
+          volumeClick={props.volumeClick}
         />
       ) : (
         <Menu
-          topic={topic}
-          setTopic={setTopic}
+          saveGames={saveGames}
+          saveGame={saveGame}
+          topic={props.topic}
+          setTopic={props.setTopic}
           backgroundColor={backgroundColor}
           formCard={formCard}
           sizeBoard={sizeBoard}
@@ -177,12 +224,14 @@ function Main(props) {
           setNewSettings={setNewSettings}
           setBackgroundGradient={setBackgroundGradient}
           backgroundGradient={backgroundGradient}
+          loadGame={loadGame}
+          deleteSave={deleteSave}
         />
       )}
       {winGame ? (
         <button
           onClick={() => {
-            createNewGame();
+            createNewGame("ng");
           }}
         >
           Новая игра

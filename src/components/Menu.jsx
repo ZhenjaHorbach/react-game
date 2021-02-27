@@ -51,7 +51,14 @@ function Menu(props) {
       <h1 className={style.name}>Menu</h1>
       <div className={style.menuList}>
         <button onClick={() => clickElemMenu("NG")}>New Game</button>
-        <button onClick={() => clickElemMenu("SG")}>Save Game</button>
+        <button
+          onClick={() => {
+            clickElemMenu("SG");
+            props.saveGame();
+          }}
+        >
+          Save Game
+        </button>
         <button onClick={() => clickElemMenu("LG")}>Load Game</button>
         <button onClick={() => clickElemMenu("ST")}>Statistics</button>
         <button onClick={() => clickElemMenu("SE")}>Settings</button>
@@ -61,7 +68,11 @@ function Menu(props) {
       ) : saveGame ? (
         <SaveGame />
       ) : loadGame ? (
-        <LoadGame />
+        <LoadGame
+          saveGames={props.saveGames}
+          loadGame={props.loadGame}
+          deleteSave={props.deleteSave}
+        />
       ) : statistics ? (
         <Statistics />
       ) : settings ? (

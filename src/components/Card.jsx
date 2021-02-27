@@ -29,6 +29,8 @@ function Card(props) {
       key={photo.id}
       onClick={() => {
         setActive(!active);
+        props.click.volume = props.volumeClick;
+        props.click.play();
         !active
           ? props.setActiveCard(props.activeCard.slice().concat([number]))
           : props.setActiveCard([]);
