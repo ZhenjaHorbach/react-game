@@ -7,9 +7,16 @@ function Board(props) {
     background: props.backgroundColor,
   };
   return (
-    <div className={style.board}>
+    <div className={style.board} id="mainPage">
       {randomCards.map((el, index) => (
         <Card
+          clickEnter={props.clickEnter}
+          setActiveCardKeyBoard={props.setActiveCardKeyBoard}
+          setNumberKeyBoard={props.setNumberKeyBoard}
+          randomCards={randomCards}
+          index={index}
+          changeCard={props.changeCard}
+          activeKeyBoard={props.activeKeyBoard === index ? true : false}
           click={props.click}
           volumeClick={props.volumeClick}
           key={`${photo[el].id}${index}`}

@@ -6,6 +6,51 @@ import SaveGame from "./Menu/SaveGame";
 import Settings from "./Menu/Settings";
 import Statistics from "./Menu/Statistics";
 
+const allLang = {
+  menu: {
+    russian: "Меню",
+    english: "Menu",
+    german: "Speisekarte",
+    italian: "Menù",
+    belorussian: "Меню",
+  },
+  newGame: {
+    russian: "Новая игра",
+    english: "New Game",
+    german: "Neues Spiel",
+    italian: "Nuovo Gioco",
+    belorussian: "Новая гульня",
+  },
+  saveGame: {
+    russian: "Сохранить игру",
+    english: "Save Game",
+    german: "Spiel Speichern",
+    italian: "Salva il Gioco",
+    belorussian: "Захаваць гульню",
+  },
+  loadGame: {
+    russian: "Загрузить игру",
+    english: "Load Game",
+    german: "Spiel Laden",
+    italian: "Carica Gioco",
+    belorussian: "Загрузіць гульню",
+  },
+  statistics: {
+    russian: "Статистика",
+    english: "Statistics",
+    german: "Statistiken",
+    italian: "Statistiche",
+    belorussian: "Статыстыка",
+  },
+  settings: {
+    russian: "Настройки",
+    english: "Settings",
+    german: "Einstellungen",
+    italian: "Impostazioni",
+    belorussian: "Налады",
+  },
+};
+
 function Menu(props) {
   const [newGame, setNewGame] = useState(false);
   const [saveGame, setSaveGame] = useState(false);
@@ -48,35 +93,45 @@ function Menu(props) {
   };
   return (
     <div className={style.menu}>
-      <h1 className={style.name}>Menu</h1>
+      <h1 className={style.name}>{allLang.menu[props.lang]}</h1>
       <div className={style.menuList}>
-        <button onClick={() => clickElemMenu("NG")}>New Game</button>
+        <button onClick={() => clickElemMenu("NG")}>
+          {allLang.newGame[props.lang]}
+        </button>
         <button
           onClick={() => {
             clickElemMenu("SG");
             props.saveGame();
           }}
         >
-          Save Game
+          {allLang.saveGame[props.lang]}
         </button>
-        <button onClick={() => clickElemMenu("LG")}>Load Game</button>
-        <button onClick={() => clickElemMenu("ST")}>Statistics</button>
-        <button onClick={() => clickElemMenu("SE")}>Settings</button>
+        <button onClick={() => clickElemMenu("LG")}>
+          {allLang.loadGame[props.lang]}
+        </button>
+        <button onClick={() => clickElemMenu("ST")}>
+          {allLang.statistics[props.lang]}
+        </button>
+        <button onClick={() => clickElemMenu("SE")}>
+          {allLang.settings[props.lang]}
+        </button>
       </div>
       {newGame ? (
-        <NewGame createNewGame={props.createNewGame} />
+        <NewGame createNewGame={props.createNewGame} lang={props.lang} />
       ) : saveGame ? (
-        <SaveGame />
+        <SaveGame lang={props.lang} />
       ) : loadGame ? (
         <LoadGame
+          lang={props.lang}
           saveGames={props.saveGames}
           loadGame={props.loadGame}
           deleteSave={props.deleteSave}
         />
       ) : statistics ? (
-        <Statistics />
+        <Statistics lang={props.lang} />
       ) : settings ? (
         <Settings
+          lang={props.lang}
           topic={props.topic}
           setTopic={props.setTopic}
           backgroundColor={props.backgroundColor}

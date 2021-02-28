@@ -14,6 +14,114 @@ const topicList = {
   space: "110854",
 };
 
+const allLang = {
+  theme: {
+    russian: "Тема",
+    english: "Theme",
+    german: "Thema",
+    italian: "Argomento",
+    belorussian: "Тэма",
+  },
+  BFC: {
+    russian: "Найденные карты",
+    english: "Found cards",
+    german: "Karten gefunden",
+    italian: "Carte trovate",
+    belorussian: "Знойдзеныя карты",
+  },
+  BNFC: {
+    russian: "Не найденные карты",
+    english: "Unidentified cards",
+    german: "Nicht identifizierte Karten",
+    italian: "Carte non identificate",
+    belorussian: "Ня знойдзеныя карты",
+  },
+  form: {
+    russian: "Форма карт",
+    english: "Card shape",
+    german: "Kartenform",
+    italian: "Forma della carta",
+    belorussian: "Форма карт",
+  },
+  numberCard: {
+    russian: "Количество карт",
+    english: "Number of cards",
+    german: "Anzahl der Karten",
+    italian: "Numero di carte",
+    belorussian: "Колькасць карт",
+  },
+  sendSetting: {
+    russian: "Принять настройки",
+    english: "Accept settings",
+    german: "Einstellungen akzeptieren",
+    italian: "Accetta le impostazioni",
+    belorussian: "Прыняць налады",
+  },
+  animal: {
+    russian: "Животные",
+    english: "Animals",
+    german: "Tiere",
+    italian: "Animali",
+    belorussian: "Жывёлы",
+  },
+  people: {
+    russian: "Люди",
+    english: "People",
+    german: "Menschen",
+    italian: "Persone",
+    belorussian: "Людзі",
+  },
+  family: {
+    russian: "Семья",
+    english: "Family",
+    german: "Familie",
+    italian: "Una famiglia",
+    belorussian: "Сям'я",
+  },
+  game: {
+    russian: "Игры",
+    english: "Games",
+    german: "Spiele",
+    italian: "Giochi",
+    belorussian: "Гульні",
+  },
+  car: {
+    russian: "Машины",
+    english: "Cars",
+    german: "Autos",
+    italian: "Automobili",
+    belorussian: "Машыны",
+  },
+  nature: {
+    russian: "Природа",
+    english: "Nature",
+    german: "Natur",
+    italian: "Natura",
+    belorussian: "Прырода",
+  },
+  sport: {
+    russian: "Спорт",
+    english: "Sport",
+    german: "Sport",
+    italian: "Sport",
+    belorussian: "Спорт",
+  },
+  food: {
+    russian: "Еда",
+    english: "Food",
+    german: "Essen",
+    italian: "Cibo",
+    belorussian: "Ежа",
+  },
+  space: {
+    russian: "Космос",
+    english: "Space",
+    german: "Raum",
+    italian: "Spazio",
+    belorussian: "Космас",
+  },
+};
+
 function Settings(props) {
   const colorCard = props.backgroundColor.slice(4, -1).split(",");
   const [numberCards, setNumberCards] = useState(props.sizeBoard / 2);
@@ -73,7 +181,7 @@ function Settings(props) {
   return (
     <div>
       <div>
-        <h2>Theme</h2>
+        <h2>{allLang.theme[props.lang]}</h2>
         <div className={style.blockNotFind}>
           {keysTopic.map((el) => {
             return (
@@ -85,14 +193,14 @@ function Settings(props) {
                   className={style.colorSee}
                   src={`http://images.pexels.com/photos/${topicList[el]}/pexels-photo-${topicList[el]}.jpeg?auto=compress&cs=tinysrgb&h=350`}
                 />
-                <h2>{el}</h2>
+                <h2>{allLang[el][props.lang]}</h2>
               </div>
             );
           })}
         </div>
       </div>
       <div>
-        <h2>Background find card</h2>
+        <h2>{allLang.BFC[props.lang]}</h2>
         <input
           className={style.redRange}
           type="range"
@@ -119,7 +227,7 @@ function Settings(props) {
         ></input>
       </div>
       <div>
-        <h2>Form</h2>
+        <h2>{allLang.form[props.lang]}</h2>
         <input
           type="range"
           min="0"
@@ -130,7 +238,7 @@ function Settings(props) {
         ></input>
       </div>
       <div>
-        <h2>Background not find card</h2>
+        <h2>{allLang.BNFC[props.lang]}</h2>
         <div className={style.blockNotFind}>
           {keys.map((el) => {
             return (
@@ -161,7 +269,7 @@ function Settings(props) {
         <div className={style.colorSee} style={colorNow}></div>
       </div>
       <div>
-        <h2>Number of cards</h2>
+        <h2>{allLang.numberCard[props.lang]}</h2>
         <input
           type="range"
           min="2"
@@ -172,7 +280,7 @@ function Settings(props) {
         ></input>
         <h5>{numberCards}</h5>
       </div>
-      <button onClick={sendSetting}>Принять настройки</button>
+      <button onClick={sendSetting}>{allLang.sendSetting[props.lang]}</button>
     </div>
   );
 }

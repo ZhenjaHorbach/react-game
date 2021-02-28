@@ -3,6 +3,22 @@ import Board from "../components/Board";
 import Menu from "../components/Menu";
 import Score from "../components/Score";
 
+const allLang = {
+  menu: {
+    russian: "Меню",
+    english: "Menu",
+    german: "Speisekarte",
+    italian: "Menù",
+    belorussian: "Меню",
+  },
+  board: {
+    russian: "Доска",
+    english: "Board",
+    german: "Tafel",
+    italian: "Tavola",
+    belorussian: "Дошка",
+  },
+};
 function Main(props) {
   const saveArray = JSON.parse(localStorage.getItem("randomCards")) || [];
 
@@ -13,6 +29,7 @@ function Main(props) {
   const [randomCards, setRandomCards] = useState(saveArray);
   const [visibilityBoard, setVisibilityBoard] = useState(true);
   const [activeCard, setActiveCard] = useState([]);
+
   const [findCard, setFindCard] = useState(
     JSON.parse(localStorage.getItem("findCard")) || []
   );
@@ -44,6 +61,12 @@ function Main(props) {
 
   //WinGame
   const [winGame, setWinGame] = useState(false);
+
+  //KeyBoard Move
+  const [activeKeyBoard, setActiveKeyBoard] = useState(null);
+  const [numberKeyBoard, setNumberKeyBoard] = useState(null);
+  const [activeCardKeyBoard, setActiveCardKeyBoard] = useState(false);
+  const [clickEnter, setClickEnter] = useState(false);
 
   const randomElements = (size, load) => {
     const newCards = Array(size)
@@ -155,6 +178,12 @@ function Main(props) {
     }
   };
 
+  const changeCard = (active, number) => {
+    !active
+      ? setActiveCard(activeCard.slice().concat([number]))
+      : setActiveCard([]);
+  };
+
   useEffect(() => {
     if (activeCard.length >= 2) {
       if (activeCard[0] === activeCard[1]) {
@@ -180,7 +209,17 @@ function Main(props) {
       }
     }
   }, [activeCard]);
-
+  const elemRow = () => {
+    if (visibilityBoard) {
+      return Math.floor(
+        parseInt(getComputedStyle(document.querySelector("#mainPage")).width) /
+          parseInt(
+            getComputedStyle(document.querySelector("#mainPage").firstChild)
+              .width
+          )
+      );
+    }
+  };
   useEffect(() => randomElements(+sizeBoard, false), []);
 
   useEffect(() => changeTimer(), []);
@@ -189,14 +228,93 @@ function Main(props) {
 
   useEffect(() => createNewGame(), [newSettings]);
 
+  useEffect(() => {
+    const onKeypress = (e) => {
+      if (e.code === "KeyD" || e.code === "ArrowRight") {
+        if (activeKeyBoard === null) {
+          setActiveKeyBoard(0);
+        } else {
+          if (activeKeyBoard === randomCards.length - 1) {
+            setActiveKeyBoard(0);
+          } else {
+            setActiveKeyBoard(activeKeyBoard + 1);
+          }
+        }
+      } else if (e.code === "KeyA" || e.code === "ArrowLeft") {
+        if (activeKeyBoard === null) {
+          setActiveKeyBoard(randomCards.length - 1);
+        } else {
+          if (activeKeyBoard === 0) {
+            setActiveKeyBoard(randomCards.length - 1);
+          } else {
+            setActiveKeyBoard(activeKeyBoard - 1);
+          }
+        }
+      } else if (e.code === "KeyS" || e.code === "ArrowDown") {
+        if (activeKeyBoard === null) {
+          setActiveKeyBoard(0);
+        } else {
+          if (
+            Math.ceil(randomCards.length / elemRow()) >
+              Math.ceil((activeKeyBoard + 1) / elemRow()) &&
+            activeKeyBoard + 1 + elemRow() > randomCards.length
+          ) {
+            setActiveKeyBoard(
+              (activeKeyBoard + 1) % 2
+                ? Math.ceil(elemRow() / 2) + 1 + activeKeyBoard
+                : Math.ceil(elemRow() / 2) + activeKeyBoard
+            );
+          } else if (
+            Math.ceil(randomCards.length / elemRow()) ===
+            Math.ceil((activeKeyBoard + 1) / elemRow())
+          ) {
+            setActiveKeyBoard(Math.floor(elemRow() / 2));
+          } else {
+            setActiveKeyBoard(activeKeyBoard + elemRow());
+          }
+        }
+      } else if (e.code === "KeyW" || e.code === "ArrowUp") {
+        if (activeKeyBoard === null) {
+          setActiveKeyBoard(randomCards.length - 1);
+        } else {
+          if (activeKeyBoard <= elemRow() - 1) {
+            setActiveKeyBoard(randomCards.length - Math.floor(elemRow() / 2));
+          } else {
+            setActiveKeyBoard(activeKeyBoard - elemRow());
+          }
+        }
+      } else if (e.code === "Enter" || e.code === "Space") {
+        setClickEnter(!clickEnter);
+        changeCard(activeCardKeyBoard, numberKeyBoard);
+      }
+    };
+
+    document.addEventListener("keyup", onKeypress);
+
+    return () => {
+      document.removeEventListener("keyup", onKeypress);
+    };
+  }, [activeKeyBoard]);
+
   return (
     <main className="main">
-      <Score scoreMove={scoreMove} timeMove={timeMove} />
-      <button onClick={() => setVisibilityBoard(!visibilityBoard)}>
-        {!visibilityBoard ? "Board" : "Menu"}
+      <Score scoreMove={scoreMove} timeMove={timeMove} lang={props.lang} />
+      <button
+        onClick={() => {
+          setVisibilityBoard(!visibilityBoard);
+          setActiveKeyBoard(null);
+        }}
+      >
+        {!visibilityBoard
+          ? allLang.board[props.lang]
+          : allLang.menu[props.lang]}
       </button>
       {visibilityBoard ? (
         <Board
+          lang={props.lang}
+          clickEnter={clickEnter}
+          setActiveCardKeyBoard={setActiveCardKeyBoard}
+          setNumberKeyBoard={setNumberKeyBoard}
           randomCards={randomCards}
           photo={props.photo}
           setActiveCard={setActiveCard}
@@ -207,9 +325,12 @@ function Main(props) {
           formCard={formCard}
           click={props.click}
           volumeClick={props.volumeClick}
+          activeKeyBoard={activeKeyBoard}
+          changeCard={changeCard}
         />
       ) : (
         <Menu
+          lang={props.lang}
           saveGames={saveGames}
           saveGame={saveGame}
           topic={props.topic}
@@ -231,6 +352,10 @@ function Main(props) {
       {winGame ? (
         <button
           onClick={() => {
+            setActiveKeyBoard(null);
+            setNumberKeyBoard(null);
+            setActiveKeyBoard(false);
+            setClickEnter(false);
             createNewGame("ng");
           }}
         >

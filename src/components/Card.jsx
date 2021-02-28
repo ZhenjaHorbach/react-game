@@ -20,20 +20,37 @@ function Card(props) {
       setActive(false);
     }
   }, [props.activeCard]);
+
+  useEffect(() => {
+    if (props.activeKeyBoard) {
+      props.setActiveCardKeyBoard(!active);
+      props.setNumberKeyBoard(props.index);
+    }
+  }, [props.activeKeyBoard]);
+
+  useEffect(() => {
+    if (props.activeKeyBoard && !elementFind) {
+      props.click.volume = +props.volumeClick;
+      props.click.play();
+      setActive(!active);
+      props.changeCard(active, props.randomCards[props.index]);
+    }
+  }, [props.clickEnter]);
+
   return (
     <div
       style={styleCard}
       className={`${style.card_body} ${
         styleGradient[props.backgroundGradient]
-      } ${elementFind ? style.card_body_elementFind : ""}`}
+      } ${elementFind ? style.card_body_elementFind : ""} ${
+        props.activeKeyBoard ? style.keyActive : ""
+      }`}
       key={photo.id}
       onClick={() => {
-        setActive(!active);
-        props.click.volume = props.volumeClick;
+        props.click.volume = +props.volumeClick;
         props.click.play();
-        !active
-          ? props.setActiveCard(props.activeCard.slice().concat([number]))
-          : props.setActiveCard([]);
+        setActive(!active);
+        props.changeCard(active, props.randomCards[props.index]);
       }}
     >
       <h1 className={style.card_name}>{number}</h1>

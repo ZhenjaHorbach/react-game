@@ -69,6 +69,7 @@ function App() {
       ) : (
         <div className="App">
           <Header
+            lang={lang}
             setCallBack={setCallBack}
             music={music}
             setLang={setLang}
@@ -76,6 +77,7 @@ function App() {
             setVolumeClick={setVolumeClick}
           />
           <Main
+            lang={lang}
             volumeClick={volumeClick}
             click={click}
             photo={photo}

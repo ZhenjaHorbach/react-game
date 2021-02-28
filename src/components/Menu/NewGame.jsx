@@ -1,4 +1,21 @@
 import React, { useState } from "react";
+const allLang = {
+  onePlayer: {
+    russian: "Один игрок",
+    english: "One Player",
+    german: "Ein Spieler",
+    italian: "Un giocatore",
+    belorussian: "Адзін гулец",
+  },
+  playerVsComputer: {
+    russian: "Игрок против Компьютера",
+    english: "Player vs Computer",
+    german: "Spieler gegen Computer",
+    italian: "Giocatore vs Computer",
+    belorussian: "Гулец супраць Кампутара",
+  },
+};
+
 function NewGame(props) {
   return (
     <div>
@@ -7,9 +24,9 @@ function NewGame(props) {
           props.createNewGame("ng");
         }}
       >
-        One Player
+        {allLang.onePlayer[props.lang]}
       </button>
-      <button>Player vs Computer</button>
+      <button>{allLang.playerVsComputer[props.lang]}</button>
     </div>
   );
 }
