@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Board from "../components/Board";
 import Menu from "../components/Menu";
 import Score from "../components/Score";
+import style from "./Main.module.css";
 
 const allLang = {
   menu: {
@@ -366,20 +367,24 @@ function Main(props) {
   }, [activeKeyBoard]);
 
   return (
-    <main className="main">
+    <main className={style.main}>
       <Score scoreMove={scoreMove} timeMove={timeMove} lang={props.lang} />
       <button
+        className={style.button_menu}
         onClick={() => {
           setVisibilityBoard(!visibilityBoard);
           setActiveKeyBoard(null);
         }}
       >
-        {!visibilityBoard
-          ? allLang.board[props.lang]
-          : allLang.menu[props.lang]}
+        <span>
+          {!visibilityBoard
+            ? allLang.board[props.lang]
+            : allLang.menu[props.lang]}
+        </span>
       </button>
       {visibilityBoard ? (
         <Board
+          visibilityBoard={visibilityBoard}
           autoGame={autoGame}
           setNowCardAutoActive={setNowCardAutoActive}
           nowCardAuto={nowCardAuto}
@@ -403,6 +408,7 @@ function Main(props) {
         />
       ) : (
         <Menu
+          visibilityBoard={visibilityBoard}
           lang={props.lang}
           saveGames={saveGames}
           saveGame={saveGame}

@@ -1,3 +1,5 @@
+import style from "./LoadElement.module.css";
+
 const allLang = {
   animal: {
     russian: "Животные",
@@ -80,7 +82,7 @@ const allLang = {
 
 function LoadElement(props) {
   return (
-    <div>
+    <div className={style.loadGame_body}>
       <div>{props.index + 1}</div>
       <div>{props.info.sizeBoard}</div>
       <div>{props.info.scoreMove}</div>

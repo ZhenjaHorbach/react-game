@@ -1,20 +1,13 @@
-.main {
-	margin: 0 10%;
+.NewGame {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	position: relative;
-	width: 900px;
-	margin:0 auto
+	font-family: 'Akaya Telivigala', cursive;
 }
 
-.body_boardAndMenu{
-	display: flex;
-}
 .button_menu{
 	display: block;
 	margin: 0 auto 20px;
-	width: 140px;
+	width: 340px;
 	height: 50px;
 	border-radius: 50%;
 	cursor: pointer;
@@ -46,6 +39,34 @@
 	box-shadow: -5px 5px 25px rgba(0, 0, 0, 0.2);
 	transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s;
 }
+
+.button_menu:nth-child(1) span{
+	background-color: rgba(255, 0, 34, 0.801);
+	text-shadow: 3px 2px 9px rgba(0, 0, 0, 0.85);
+}
+
+.button_menu:hover:nth-child(1) span, .button_menu:nth-child(1):focus span {
+	background-color: rgba(255, 0, 0, 0.555);
+}
+
+.button_menu:nth-child(2) span{
+	text-shadow: 3px 2px 9px rgba(0, 0, 0, 0.85);
+	background-color: rgba(43, 255, 0, 0.801);
+}
+
+.button_menu:hover:nth-child(2) span, .button_menu:nth-child(2):focus span {
+	background-color: rgba(43, 255, 0, 0.575);
+}
+
+.button_menu:nth-child(3) span{
+	text-shadow: 3px 2px 9px rgba(0, 0, 0, 0.85);
+	background-color: rgba(238, 255, 0, 0.801);
+}
+
+.button_menu:hover:nth-child(3) span, .button_menu:nth-child(2):focus span {
+	background-color: rgba(238, 255, 0, 0.534);
+}
+
 .button_menu::after {
 	content: "";
 	position: absolute;

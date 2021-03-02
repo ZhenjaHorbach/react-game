@@ -1,13 +1,26 @@
 import Card from "./Card";
 import style from "./Board.module.css";
+import React, { useState, useEffect, useRef } from "react";
 
 function Board(props) {
   const { randomCards = [], photo, findCard = [] } = props;
+  const [seeBoard, setSeeBoard] = useState(false);
   const styleCards = {
     background: props.backgroundColor,
   };
+
+  useEffect(() => {
+    if (props.visibilityBoard) {
+      setTimeout(() => {
+        setSeeBoard(true);
+      }, 500);
+    }
+  }, [props.visibilityBoard]);
   return (
-    <div className={style.board} id="mainPage">
+    <div
+      className={`${style.board} ${seeBoard ? style.visibility : ""}`}
+      id="mainPage"
+    >
       {randomCards.map((el, index) => (
         <Card
           autoGame={props.autoGame}

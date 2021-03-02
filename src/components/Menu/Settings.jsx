@@ -179,8 +179,8 @@ function Settings(props) {
     setBlueColor(event.target.value);
   };
   return (
-    <div>
-      <div>
+    <div className={style.settings}>
+      <div className={style.theme}>
         <h2>{allLang.theme[props.lang]}</h2>
         <div className={style.blockNotFind}>
           {keysTopic.map((el) => {
@@ -199,76 +199,66 @@ function Settings(props) {
           })}
         </div>
       </div>
-      <div>
-        <h2>{allLang.BFC[props.lang]}</h2>
-        <input
-          className={style.redRange}
-          type="range"
-          min="0"
-          max="255"
-          value={redColor}
-          onChange={changeRed}
-        ></input>
-        <input
-          className={style.greenRange}
-          type="range"
-          min="0"
-          max="255"
-          value={greenColor}
-          onChange={changeGreen}
-        ></input>
-        <input
-          className={style.blueRange}
-          type="range"
-          min="0"
-          max="255"
-          value={blueColor}
-          onChange={changeBlue}
-        ></input>
-      </div>
-      <div>
-        <h2>{allLang.form[props.lang]}</h2>
-        <input
-          type="range"
-          min="0"
-          max="50"
-          value={radiusCards}
-          class={style.slider}
-          onChange={changeRadius}
-        ></input>
-      </div>
-      <div>
-        <h2>{allLang.BNFC[props.lang]}</h2>
-        <div className={style.blockNotFind}>
-          {keys.map((el) => {
-            return (
-              <div
-                className={style.blockNotFindEl}
-                onClick={() => setBackgroundImg(el)}
-              >
-                <div className={`${style.colorSee} ${styleGradient[el]}`}></div>
-                <h2>{el}</h2>
-              </div>
-            );
-          })}
+      <div className={style.find}>
+        <div>
+          <h2>{allLang.BFC[props.lang]}</h2>
+          <input
+            className={style.redRange}
+            type="range"
+            min="0"
+            max="255"
+            value={redColor}
+            onChange={changeRed}
+          ></input>
+          <input
+            className={style.greenRange}
+            type="range"
+            min="0"
+            max="255"
+            value={greenColor}
+            onChange={changeGreen}
+          ></input>
+          <input
+            className={style.blueRange}
+            type="range"
+            min="0"
+            max="255"
+            value={blueColor}
+            onChange={changeBlue}
+          ></input>
+        </div>
+        <div>
+          <h2>{allLang.form[props.lang]}</h2>
+          <input
+            type="range"
+            min="0"
+            max="50"
+            value={radiusCards}
+            class={style.slider}
+            onChange={changeRadius}
+          ></input>
         </div>
       </div>
-
-      <div className={style.blockCardSee}>
-        <div
-          className={`${style.colorSee} ${styleGradient[backgroundImg]}`}
-          style={radiusNow}
-        ></div>
-        <div className={style.colorSee} style={colorNow}>
-          <img
-            style={radiusNow}
-            className={style.colorSee}
-            src={`http://images.pexels.com/photos/${topicList[topicName]}/pexels-photo-${topicList[topicName]}.jpeg?auto=compress&cs=tinysrgb&h=350`}
-          />
+      <div className={style.notFind}>
+        <div>
+          <h2>{allLang.BNFC[props.lang]}</h2>
+          <div className={style.blockNotFind}>
+            {keys.map((el) => {
+              return (
+                <div
+                  className={style.blockNotFindEl}
+                  onClick={() => setBackgroundImg(el)}
+                >
+                  <div
+                    className={`${style.colorSee} ${styleGradient[el]}`}
+                  ></div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className={style.colorSee} style={colorNow}></div>
       </div>
-      <div>
+      <div className={style.numberCards}>
         <h2>{allLang.numberCard[props.lang]}</h2>
         <input
           type="range"
@@ -279,8 +269,24 @@ function Settings(props) {
           onChange={changeRange}
         ></input>
         <h5>{numberCards}</h5>
+        <div className={style.blockCardSee}>
+          <div
+            className={`${style.colorSee} ${styleGradient[backgroundImg]}`}
+            style={radiusNow}
+          ></div>
+          <div className={style.colorSee} style={colorNow}>
+            <img
+              style={radiusNow}
+              className={style.colorSee}
+              src={`http://images.pexels.com/photos/${topicList[topicName]}/pexels-photo-${topicList[topicName]}.jpeg?auto=compress&cs=tinysrgb&h=350`}
+            />
+          </div>
+          <div className={style.colorSee} style={colorNow}></div>
+        </div>
       </div>
-      <button onClick={sendSetting}>{allLang.sendSetting[props.lang]}</button>
+      <button className={style.button_menu} onClick={sendSetting}>
+        <span>{allLang.sendSetting[props.lang]}</span>
+      </button>
     </div>
   );
 }

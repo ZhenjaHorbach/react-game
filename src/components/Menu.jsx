@@ -28,6 +28,13 @@ const allLang = {
     italian: "Salva il Gioco",
     belorussian: "Захаваць гульню",
   },
+  saveGameEnd: {
+    russian: "Игра сохранена!!!",
+    english: "Game saved !!!",
+    german: "Spiel gespeichert !!!",
+    italian: "Gioco salvato !!!",
+    belorussian: "Гульня захавана !!!",
+  },
   loadGame: {
     russian: "Загрузить игру",
     english: "Load Game",
@@ -52,11 +59,15 @@ const allLang = {
 };
 
 function Menu(props) {
+  const [menuElActive, setMenuElActive] = useState(false);
+  const [addStyle, setAddStyle] = useState({});
+  const [addStyleEl, setAddStyleEl] = useState({});
   const [newGame, setNewGame] = useState(false);
   const [saveGame, setSaveGame] = useState(false);
   const [statistics, setStatistics] = useState(false);
   const [settings, setSettings] = useState(false);
   const [loadGame, setLoadGame] = useState(false);
+  const [seeBoard, setSeeBoard] = useState(false);
 
   const clickElemMenu = (el) => {
     return el === "NG"
@@ -91,63 +102,149 @@ function Menu(props) {
         setLoadGame(false)
       : "";
   };
+
+  useEffect(() => {
+    if (!props.visibilityBoard) {
+      setTimeout(() => {
+        setSeeBoard(true);
+      }, 500);
+    }
+  }, [props.visibilityBoard]);
+
+  useEffect(() => {
+    if (menuElActive) {
+      setTimeout(() => {
+        const newArr = { ...addStyle };
+        const newArrEl = { ...addStyleEl };
+        newArr["opacity"] = "0";
+        newArr["margin-top"] = `-${
+          getComputedStyle(document.querySelector("#menu")).height
+        }`;
+
+        setAddStyle(newArr);
+        setAddStyleEl(newArrEl);
+      });
+      setTimeout(() => {
+        const newArr = { ...addStyle };
+        const newArrEl = { ...addStyleEl };
+        newArr["display"] = "none";
+        newArrEl["top"] = "0";
+        setAddStyle(newArr);
+        setAddStyleEl(newArrEl);
+      }, 1000);
+    }
+  }, [menuElActive]);
   return (
-    <div className={style.menu}>
-      <h1 className={style.name}>{allLang.menu[props.lang]}</h1>
-      <div className={style.menuList}>
-        <button onClick={() => clickElemMenu("NG")}>
-          {allLang.newGame[props.lang]}
-        </button>
-        <button
-          onClick={() => {
-            clickElemMenu("SG");
-            props.saveGame();
-          }}
-        >
-          {allLang.saveGame[props.lang]}
-        </button>
-        <button onClick={() => clickElemMenu("LG")}>
-          {allLang.loadGame[props.lang]}
-        </button>
-        <button onClick={() => clickElemMenu("ST")}>
-          {allLang.statistics[props.lang]}
-        </button>
-        <button onClick={() => clickElemMenu("SE")}>
-          {allLang.settings[props.lang]}
-        </button>
+    <div className={style.menu_Top}>
+      <div className={`${style.menu} ${seeBoard ? style.visibility : ""}`}>
+        <h1 className={style.name}>
+          {menuElActive
+            ? allLang[menuElActive][props.lang]
+            : allLang.menu[props.lang]}
+        </h1>
+        <div className={`${style.menuList}`} style={addStyle} id="menu">
+          <div
+            className={style.glitch_btn}
+            onClick={() => {
+              clickElemMenu("NG");
+              setMenuElActive("newGame");
+            }}
+          >
+            <div className={style.text}>{allLang.newGame[props.lang]}</div>
+            <div className={style.mask}>
+              <span>{allLang.newGame[props.lang]}</span>
+            </div>
+          </div>
+          <div
+            className={style.glitch_btn}
+            onClick={() => {
+              clickElemMenu("SG");
+              props.saveGame();
+              setMenuElActive("saveGame");
+            }}
+          >
+            <div className={style.text}>{allLang.saveGame[props.lang]}</div>
+            <div className={style.mask}>
+              <span>{allLang.saveGame[props.lang]}</span>
+            </div>
+          </div>
+
+          <div
+            className={style.glitch_btn}
+            onClick={() => {
+              clickElemMenu("LG");
+              setMenuElActive("loadGame");
+            }}
+          >
+            <div className={style.text}>{allLang.loadGame[props.lang]}</div>
+            <div className={style.mask}>
+              <span>{allLang.loadGame[props.lang]}</span>
+            </div>
+          </div>
+
+          <div
+            className={style.glitch_btn}
+            onClick={() => {
+              clickElemMenu("ST");
+              setMenuElActive("statistics");
+            }}
+          >
+            <div className={style.text}>{allLang.statistics[props.lang]}</div>
+            <div className={style.mask}>
+              <span>{allLang.statistics[props.lang]}</span>
+            </div>
+          </div>
+
+          <div
+            className={style.glitch_btn}
+            onClick={() => {
+              clickElemMenu("SE");
+              setMenuElActive("settings");
+            }}
+          >
+            <div className={style.text}>{allLang.settings[props.lang]}</div>
+            <div className={style.mask}>
+              <span>{allLang.settings[props.lang]}</span>
+            </div>
+          </div>
+        </div>
       </div>
-      {newGame ? (
-        <NewGame createNewGame={props.createNewGame} lang={props.lang} />
-      ) : saveGame ? (
-        <SaveGame lang={props.lang} />
-      ) : loadGame ? (
-        <LoadGame
-          lang={props.lang}
-          saveGames={props.saveGames}
-          loadGame={props.loadGame}
-          deleteSave={props.deleteSave}
-        />
-      ) : statistics ? (
-        <Statistics lang={props.lang} />
-      ) : settings ? (
-        <Settings
-          lang={props.lang}
-          topic={props.topic}
-          setTopic={props.setTopic}
-          backgroundColor={props.backgroundColor}
-          formCard={props.formCard}
-          sizeBoard={props.sizeBoard}
-          createNewGame={props.createNewGame}
-          setSizeBoard={props.setSizeBoard}
-          setBackgroundColor={props.setBackgroundColor}
-          setFormCard={props.setFormCard}
-          setNewSettings={props.setNewSettings}
-          setBackgroundGradient={props.setBackgroundGradient}
-          backgroundGradient={props.backgroundGradient}
-        />
-      ) : (
-        ""
-      )}
+      <div className={style.elemMenu} style={addStyleEl}>
+        {newGame ? (
+          <NewGame createNewGame={props.createNewGame} lang={props.lang} />
+        ) : saveGame ? (
+          <h1 className={style.SaveGameEnd}>
+            {allLang.saveGameEnd[props.lang]}
+          </h1>
+        ) : loadGame ? (
+          <LoadGame
+            lang={props.lang}
+            saveGames={props.saveGames}
+            loadGame={props.loadGame}
+            deleteSave={props.deleteSave}
+          />
+        ) : statistics ? (
+          <Statistics lang={props.lang} />
+        ) : settings ? (
+          <Settings
+            lang={props.lang}
+            topic={props.topic}
+            setTopic={props.setTopic}
+            backgroundColor={props.backgroundColor}
+            formCard={props.formCard}
+            sizeBoard={props.sizeBoard}
+            createNewGame={props.createNewGame}
+            setSizeBoard={props.setSizeBoard}
+            setBackgroundColor={props.setBackgroundColor}
+            setFormCard={props.setFormCard}
+            setNewSettings={props.setNewSettings}
+            setBackgroundGradient={props.setBackgroundGradient}
+            backgroundGradient={props.backgroundGradient}
+          />
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }

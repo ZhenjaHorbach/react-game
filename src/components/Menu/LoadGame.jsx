@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LoadElement from "./LoadElement";
+import style from "./LoadGame.module.css";
 
 const allLang = {
   size: {
@@ -44,12 +45,26 @@ const allLang = {
     italian: "Punti",
     belorussian: "Колькасць ачкоў",
   },
+  load: {
+    russian: "Загрузка",
+    english: "Load",
+    german: "Wird geladen",
+    italian: "Caricamento",
+    belorussian: "Загрузка",
+  },
+  delete: {
+    russian: "Удаление",
+    english: "Delete",
+    german: "Löschen",
+    italian: "Eliminazione",
+    belorussian: "Выдаленне",
+  },
 };
 
 function LoadGame(props) {
   return (
-    <div>
-      <div>
+    <div className={style.loadGame}>
+      <div className={style.loadGame_header}>
         <div>№</div>
         <div>{allLang.size[props.lang]}</div>
         <div>{allLang.move[props.lang]}</div>
@@ -57,6 +72,8 @@ function LoadGame(props) {
         <div>{allLang.findCard[props.lang]}</div>
         <div>{allLang.theme[props.lang]}</div>
         <div>{allLang.score[props.lang]}</div>
+        <div>{allLang.load[props.lang]}</div>
+        <div>{allLang.delete[props.lang]}</div>
       </div>
       {props.saveGames.map((el, index) => (
         <LoadElement

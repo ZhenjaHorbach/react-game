@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import style from "./NewGame.module.css";
 const allLang = {
   onePlayer: {
     russian: "Один игрок",
@@ -7,13 +8,13 @@ const allLang = {
     italian: "Un giocatore",
     belorussian: "Адзін гулец",
   },
-		autoGame: {
-			russian: "Авто игра",
-			english: "Auto Game",
-			german: "Auto-Spiel",
-			italian: "Gioco automatico",
-			belorussian: "Аўтаматычная гульня",
-	},
+  autoGame: {
+    russian: "Авто игра",
+    english: "Auto Game",
+    german: "Auto-Spiel",
+    italian: "Gioco automatico",
+    belorussian: "Аўтаматычная гульня",
+  },
   playerVsComputer: {
     russian: "Игрок против Компьютера",
     english: "Player vs Computer",
@@ -25,22 +26,26 @@ const allLang = {
 
 function NewGame(props) {
   return (
-    <div>
+    <div className={style.NewGame}>
       <button
+        className={style.button_menu}
         onClick={() => {
           props.createNewGame("ng");
         }}
       >
-        {allLang.onePlayer[props.lang]}
+        <span>{allLang.onePlayer[props.lang]}</span>
       </button>
       <button
+        className={style.button_menu}
         onClick={() => {
           props.createNewGame("ag");
         }}
       >
-        {allLang.autoGame[props.lang]}
+        <span>{allLang.autoGame[props.lang]}</span>
       </button>
-      <button>{allLang.playerVsComputer[props.lang]}</button>
+      <button className={style.button_menu}>
+        <span>{allLang.playerVsComputer[props.lang]}</span>
+      </button>
     </div>
   );
 }

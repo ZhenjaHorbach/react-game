@@ -2,4 +2,9 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-around;
+	transform: scale(0) ;
+	transition: 1s ease all;
+}
+.visibility {
+	transform: scale(1) ;
 }
