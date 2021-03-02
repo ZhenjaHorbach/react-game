@@ -1,0 +1,71 @@
+.volume{
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Akaya Telivigala', cursive;
+}
+
+.music{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.music_top{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.music_bottom{
+	margin-left: 30px;
+	-webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+	-moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+	box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+	padding: 10px;
+	border-radius: 10px;
+	transition: 2s linear all;
+	width: 250px;
+	height: 100px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.music_bottom p {
+	transition: 2s linear all;
+	height: 30px;
+}
+
+.music_play{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	border:3px solid rgba(0, 0, 0, 0.226);
+	object-fit: fill;
+	object-position: center center;
+	transition: 2s linear all,
+}
+
+.music input{
+	margin: 0 auto;
+	height: 30px;
+}
+
+.music_AB{
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+}
+.music p {
+	text-align: center;
+	transition: 1s ease all;
+}
+.music_SP{
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	border:4px solid rgba(255, 255, 255, 0.829);
+}

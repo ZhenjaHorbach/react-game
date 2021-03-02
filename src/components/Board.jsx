@@ -10,7 +10,11 @@ function Board(props) {
     <div className={style.board} id="mainPage">
       {randomCards.map((el, index) => (
         <Card
+          autoGame={props.autoGame}
+          nowCardAuto={props.nowCardAuto === index ? true : false}
+          setNowCardAutoActive={props.setNowCardAutoActive}
           clickEnter={props.clickEnter}
+          setClickEnter={props.setClickEnter}
           setActiveCardKeyBoard={props.setActiveCardKeyBoard}
           setNumberKeyBoard={props.setNumberKeyBoard}
           randomCards={randomCards}

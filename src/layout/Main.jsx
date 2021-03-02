@@ -54,10 +54,8 @@ function Main(props) {
     +localStorage.getItem("scoreMove") + 1 || 0
   );
   const [timeMove, setTimeMove] = useState(
-    localStorage.getItem("timeMove") || 0
+    +localStorage.getItem("timeMove") || 0
   );
-  const timeMoveRef = useRef(+localStorage.getItem("timeMove") || 0);
-  const timeBody = useRef(null);
 
   //WinGame
   const [winGame, setWinGame] = useState(false);
@@ -65,8 +63,67 @@ function Main(props) {
   //KeyBoard Move
   const [activeKeyBoard, setActiveKeyBoard] = useState(null);
   const [numberKeyBoard, setNumberKeyBoard] = useState(null);
+  const [numberFirstKeyBoard, setNumberFirstKeyBoard] = useState(null);
   const [activeCardKeyBoard, setActiveCardKeyBoard] = useState(false);
   const [clickEnter, setClickEnter] = useState(false);
+
+  //AutoGame
+  const [autoGame, setAutoGame] = useState(false);
+  const [nowCardAuto, setNowCardAuto] = useState(0);
+  const [nowCardAutoActive, setNowCardAutoActive] = useState(false);
+  const [findCardAuto, setFindCardAuto] = useState(1);
+
+  function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  }
+
+  useInterval(() => {
+    if (findCard.find((el) => el === randomCards[nowCardAuto])) {
+      setNowCardAuto(nowCardAuto + 1);
+    }
+    if (winGame) {
+      setAutoGame(false);
+      setActiveKeyBoard(null);
+      setNumberKeyBoard(null);
+      setActiveCardKeyBoard(false);
+      setClickEnter(false);
+    }
+    if (autoGame) {
+      setActiveKeyBoard(+findCardAuto % sizeBoard);
+      changeCard(nowCardAutoActive, randomCards[nowCardAuto]);
+      setClickEnter(false);
+      changeCard(activeCardKeyBoard, activeKeyBoard);
+      setClickEnter(true);
+      setTimeout(() => {
+        setFindCardAuto(+findCardAuto + 1);
+      }, 500);
+    } else {
+      setFindCardAuto(findCardAuto);
+    }
+  }, 500);
+
+  useInterval(() => {
+    if (visibilityBoard) {
+      setTimeMove(+timeMove + 1);
+      localStorage.setItem("timeMove", timeMove);
+    } else {
+      setTimeMove(timeMove);
+    }
+  }, 1000);
 
   const randomElements = (size, load) => {
     const newCards = Array(size)
@@ -89,20 +146,34 @@ function Main(props) {
     }
   };
 
+  const createNewGameF = () => {
+    props.getImg(props.topic);
+    randomElements(sizeBoard, true);
+    setVisibilityBoard(true);
+    setFindCard([]);
+    setScoreMove(0);
+    setTimeMove(0);
+    setWinGame(false);
+    setNewSettings(false);
+    localStorage.setItem("findCard", JSON.stringify([]));
+    setFindCardAuto(0);
+    setAutoGame(false);
+    setActiveKeyBoard(null);
+    setNumberKeyBoard(null);
+    setActiveCardKeyBoard(false);
+    setClickEnter(false);
+    setNowCardAuto(0);
+  };
+
   const createNewGame = (args) => {
     if (newSettings || args === "ng") {
-      props.getImg(props.topic);
-      randomElements(sizeBoard, true);
-      setVisibilityBoard(true);
-      setFindCard([]);
-      setScoreMove(0);
-      setTimeMove(0);
-      timeMoveRef.current = 0;
-      setWinGame(false);
-      setNewSettings(false);
-      localStorage.setItem("findCard", JSON.stringify([]));
+      createNewGameF();
+    } else if (args === "ag") {
+      createNewGameF();
+      setAutoGame(true);
     }
   };
+
   const deleteSave = (index) => {
     const newSave = saveGames.filter((_, indexEl) => {
       return index !== indexEl;
@@ -110,6 +181,7 @@ function Main(props) {
     setSaveGames(newSave);
     localStorage.setItem("saveGames", JSON.stringify(newSave));
   };
+
   const loadGame = (index) => {
     props.getImg(saveGames[index].topic);
     setRandomCards(saveGames[index].randomCards);
@@ -117,7 +189,6 @@ function Main(props) {
     setFindCard(saveGames[index].findCards);
     setScoreMove(saveGames[index].scoreMove);
     setTimeMove(saveGames[index].timeMove);
-    timeMoveRef.current = saveGames[index].timeMove;
     setWinGame(false);
     setNewSettings(false);
     setBackgroundGradient(saveGames[index].backgroundGradient);
@@ -128,7 +199,7 @@ function Main(props) {
         "randomCards",
         JSON.stringify(saveGames[index].randomCards)
       );
-      localStorage.setItem("timeMove", timeMoveRef.current);
+      localStorage.setItem("timeMove", timeMove);
       localStorage.setItem(
         "findCard",
         JSON.stringify(saveGames[index].findCards)
@@ -142,6 +213,13 @@ function Main(props) {
         saveGames[index].backgroundGradient
       );
     }, 100);
+    setFindCardAuto(0);
+    setAutoGame(false);
+    setActiveKeyBoard(null);
+    setNumberKeyBoard(null);
+    setActiveCardKeyBoard(false);
+    setClickEnter(false);
+    setNowCardAuto(0);
   };
 
   const saveGame = () => {
@@ -160,22 +238,6 @@ function Main(props) {
     nowArray.push(nowSave);
     setSaveGames(nowArray);
     localStorage.setItem("saveGames", JSON.stringify(nowArray));
-  };
-  const changeTimer = () => {
-    clearInterval(timeBody.current);
-    if (visibilityBoard) {
-      timeBody.current = setInterval(() => {
-        timeMoveRef.current = timeMoveRef.current + 1;
-        setTimeMove(timeMoveRef.current);
-        localStorage.setItem("timeMove", timeMoveRef.current);
-      }, 1000);
-    } else {
-      timeBody.current = setInterval(() => {
-        timeMoveRef.current = timeMoveRef.current + 0;
-        setTimeMove(timeMoveRef.current);
-        localStorage.setItem("timeMove", timeMoveRef.current);
-      }, 1000);
-    }
   };
 
   const changeCard = (active, number) => {
@@ -221,10 +283,6 @@ function Main(props) {
     }
   };
   useEffect(() => randomElements(+sizeBoard, false), []);
-
-  useEffect(() => changeTimer(), []);
-
-  useEffect(() => changeTimer(), [visibilityBoard]);
 
   useEffect(() => createNewGame(), [newSettings]);
 
@@ -284,8 +342,19 @@ function Main(props) {
           }
         }
       } else if (e.code === "Enter" || e.code === "Space") {
-        setClickEnter(!clickEnter);
-        changeCard(activeCardKeyBoard, numberKeyBoard);
+        if (numberFirstKeyBoard === null) {
+          setClickEnter(true);
+          changeCard(activeCardKeyBoard, numberKeyBoard);
+          setNumberFirstKeyBoard(numberKeyBoard);
+        } else if (numberFirstKeyBoard === numberKeyBoard) {
+          setClickEnter(false);
+          changeCard(activeCardKeyBoard, numberKeyBoard);
+          setNumberFirstKeyBoard(null);
+        } else {
+          setClickEnter(false);
+          changeCard(activeCardKeyBoard, numberKeyBoard);
+          setNumberFirstKeyBoard(null);
+        }
       }
     };
 
@@ -311,6 +380,10 @@ function Main(props) {
       </button>
       {visibilityBoard ? (
         <Board
+          autoGame={autoGame}
+          setNowCardAutoActive={setNowCardAutoActive}
+          nowCardAuto={nowCardAuto}
+          setClickEnter={setClickEnter}
           lang={props.lang}
           clickEnter={clickEnter}
           setActiveCardKeyBoard={setActiveCardKeyBoard}

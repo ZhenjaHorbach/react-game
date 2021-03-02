@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import style from "./Volume.module.css";
 
 function Volume(props) {
   const [play, setPlay] = useState(false);
@@ -12,6 +13,9 @@ function Volume(props) {
   const [click, setClick] = useState(
     new Audio("https://my-files.su/Save/127467/click.mp3")
   );
+  const timeMoveRef = useRef(0);
+  const timeBody = useRef(null);
+  const [timeMove, setTimeMove] = useState(0);
   props.setClick(click);
 
   const changeVolume = (event) => {
@@ -69,39 +73,76 @@ function Volume(props) {
     nextMusic();
   };
 
+  const styleDisc = {
+    backgroundImage: `url(${props.music[numMusic].share["image"]})`,
+    transform: `rotate(${timeMove}deg)`,
+  };
+
+  const changeRadius = () => {
+    clearInterval(timeBody.current);
+    if (play) {
+      timeBody.current = setInterval(() => {
+        timeMoveRef.current = timeMoveRef.current + 20;
+        setTimeMove(timeMoveRef.current);
+        localStorage.setItem("timeMove", timeMoveRef.current);
+      }, 2000);
+    } else {
+      timeBody.current = setInterval(() => {
+        timeMoveRef.current = timeMoveRef.current + 0;
+        setTimeMove(timeMoveRef.current);
+        localStorage.setItem("timeMove", timeMoveRef.current);
+      }, 2000);
+    }
+  };
+
+  useEffect(() => changeRadius(), []);
+
+  useEffect(() => changeRadius(), [play]);
+
   return (
-    <div>
-      <div>
-        <img
-          src="https://img.icons8.com/flat-round/32/000000/left--v1.png"
-          onClick={() => previousMusic()}
-        />
-        <div>
-          {play ? (
-            <img
-              src="https://img.icons8.com/office/48/000000/circled-pause.png"
-              onClick={() => setPlay(!play)}
-            />
-          ) : (
-            <img
-              src="https://img.icons8.com/office/48/000000/circled-play.png"
-              onClick={() => setPlay(!play)}
-            />
-          )}
+    <div className={style.volume}>
+      <div className={style.music}>
+        <div className={style.music_top}>
+          <img
+            className={style.music_AB}
+            src="https://img.icons8.com/ultraviolet/40/000000/back.png"
+            onClick={() => previousMusic()}
+          />
+          <div className={style.music_play} style={styleDisc}>
+            {play ? (
+              <img
+                className={style.music_SP}
+                src="https://img.icons8.com/ultraviolet/40/000000/pause.png"
+                onClick={() => setPlay(!play)}
+              />
+            ) : (
+              <img
+                className={style.music_SP}
+                src="https://img.icons8.com/ultraviolet/40/000000/play--v1.png"
+                onClick={() => setPlay(!play)}
+              />
+            )}
+          </div>
+          <img
+            className={style.music_AB}
+            src="https://img.icons8.com/ultraviolet/40/000000/forward--v2.png"
+            onClick={() => nextMusic()}
+          />
         </div>
-        <img
-          src="https://img.icons8.com/flat-round/32/000000/right--v1.png"
-          onClick={() => nextMusic()}
-        />
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={+volume}
-          onChange={changeVolume}
-        ></input>
+        <div className={style.music_bottom}>
+          <p>
+            {props.music[numMusic].subtitle}-{props.music[numMusic].title}
+          </p>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={+volume}
+            onChange={changeVolume}
+          ></input>
+        </div>
       </div>
-      <div>
+      <div className={style.click}>
         <input
           type="range"
           min="0"

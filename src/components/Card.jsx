@@ -29,6 +29,12 @@ function Card(props) {
   }, [props.activeKeyBoard]);
 
   useEffect(() => {
+    if (props.nowCardAuto) {
+      props.setNowCardAutoActive(active);
+    }
+  }, [active]);
+
+  useEffect(() => {
     if (props.activeKeyBoard && !elementFind) {
       props.click.volume = +props.volumeClick;
       props.click.play();
@@ -57,7 +63,7 @@ function Card(props) {
       <img
         style={styleImg}
         className={`${style.card_image} ${
-          active ? style.card_image_active : ""
+          active || props.autoGame ? style.card_image_active : ""
         }`}
         src={photo.src.medium}
         alt={photo.id}

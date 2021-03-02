@@ -41,7 +41,7 @@ function App() {
         method: "GET",
         headers: {
           "x-rapidapi-key":
-            "a0aa2056dbmsh22d910d656d977ep163528jsn24a2a583015e",
+            "4228228f19msha45a049da87e372p1394eajsn6d7c98d0f99d",
           "x-rapidapi-host": "shazam.p.rapidapi.com",
         },
       }

@@ -7,6 +7,13 @@ const allLang = {
     italian: "Un giocatore",
     belorussian: "Адзін гулец",
   },
+		autoGame: {
+			russian: "Авто игра",
+			english: "Auto Game",
+			german: "Auto-Spiel",
+			italian: "Gioco automatico",
+			belorussian: "Аўтаматычная гульня",
+	},
   playerVsComputer: {
     russian: "Игрок против Компьютера",
     english: "Player vs Computer",
@@ -25,6 +32,13 @@ function NewGame(props) {
         }}
       >
         {allLang.onePlayer[props.lang]}
+      </button>
+      <button
+        onClick={() => {
+          props.createNewGame("ag");
+        }}
+      >
+        {allLang.autoGame[props.lang]}
       </button>
       <button>{allLang.playerVsComputer[props.lang]}</button>
     </div>
