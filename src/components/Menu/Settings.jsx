@@ -183,9 +183,10 @@ function Settings(props) {
       <div className={style.theme}>
         <h2>{allLang.theme[props.lang]}</h2>
         <div className={style.blockNotFind}>
-          {keysTopic.map((el) => {
+          {keysTopic.map((el, index) => {
             return (
               <div
+                key={index}
                 className={style.blockNotFindEl}
                 onClick={() => setTopicName(el)}
               >
@@ -234,7 +235,7 @@ function Settings(props) {
             min="0"
             max="50"
             value={radiusCards}
-            class={style.slider}
+            className={style.slider}
             onChange={changeRadius}
           ></input>
         </div>
@@ -243,9 +244,10 @@ function Settings(props) {
         <div>
           <h2>{allLang.BNFC[props.lang]}</h2>
           <div className={style.blockNotFind}>
-            {keys.map((el) => {
+            {keys.map((el, index) => {
               return (
                 <div
+                  key={index}
                   className={style.blockNotFindEl}
                   onClick={() => setBackgroundImg(el)}
                 >

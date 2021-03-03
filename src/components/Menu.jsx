@@ -117,7 +117,7 @@ function Menu(props) {
         const newArr = { ...addStyle };
         const newArrEl = { ...addStyleEl };
         newArr["opacity"] = "0";
-        newArr["margin-top"] = `-${
+        newArr["marginTop"] = `-${
           getComputedStyle(document.querySelector("#menu")).height
         }`;
 
