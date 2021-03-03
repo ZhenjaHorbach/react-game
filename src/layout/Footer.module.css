@@ -1,0 +1,54 @@
+.footerBody {
+	transition: 0.5s ease all;
+	height: 4rem;
+	width: 100vw;
+	position: fixed;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	font-size: 2rem;
+	bottom: 0;
+	display: flex;
+	background-color: white;
+	z-index: 4;
+	align-items: center;
+	-webkit-box-shadow: 1px 4px 17px 0px #000000;
+	box-shadow: 1px 4px 17px 0px #000000;
+	font-family: 'Neucha', cursive;
+}
+
+.footerBodyYearName {
+	margin: 0 3rem;
+}
+
+.footerBodyGit {
+	font-size: 2rem;
+	color: rgb(255, 0, 0) !important;
+	text-decoration: none;
+}
+.footerBodyGit p {
+	color: rgb(255, 0, 0);
+	transition: 0.5s ease all;
+}
+.footerBodyGit p:hover {
+	color: rgb(0, 0, 0);
+}
+
+.footerBodyImg {
+	width: 9rem;
+	height: 4rem;
+	font-size: 2rem;
+	display: flex;
+}
+.card-content {
+	padding: 1rem 2rem;
+}
+
+@media (max-width: 650px) {
+	.footerBodyYearName {
+		font-size: 20px;
+		text-align: center;
+		margin: 0 10px;
+	}
+	
+}

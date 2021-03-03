@@ -1,0 +1,89 @@
+.main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+	width: 900px;
+	margin:0 auto 100px;
+}
+
+.body_boardAndMenu{
+	display: flex;
+}
+.button_menu{
+	display: block;
+	margin: 0 auto 20px;
+	width: 140px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.button_menu{
+	margin: 0 auto 20px;
+	position: relative;
+	display: inline-block;
+	background: none;
+	outline: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	color: #eee;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+}
+.button_menu span {
+	position: relative;
+	z-index: 1;
+	display: block;
+	min-width: 1em;
+	padding: 1em;
+	border-radius: 2em;
+	background-color: rgba(0, 38, 255, 0.55);
+	border: 1px solid rgba(0, 38, 255, 0.199);
+	box-shadow: -5px 5px 25px rgba(0, 0, 0, 0.2);
+	transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s;
+}
+.button_menu::after {
+	content: "";
+	position: absolute;
+	top: -1em;
+	bottom: -1em;
+	left: -1em;
+	right: -1em;
+	border-radius: 4em;
+	box-shadow: 0 0 0px rgba(0, 0, 0, 0.2), inset 0 0 0px rgba(0, 0, 0, 0.2);
+	transition: box-shadow 0.1s;
+}
+.button_menu:hover span, .button_menu:focus span {
+	background-color: rgba(0, 38, 255, 0.55);;
+}
+.button_menu:active span {
+	background-color: rgba(0, 38, 255, 0.55);;
+	transform: scale(0.97);
+	box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+.button_menu:active::after {
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), inset -3px 3px 1em rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 910px) {
+	.main {
+		width: 700px;
+		margin-bottom: 130px;
+	}
+}
+
+@media (max-width: 710px) {
+	.main {
+		width: 500px;
+		margin-bottom: 130px;
+	}
+}
+
+@media (max-width: 510px) {
+	.main {
+		width: 320px;
+	}
+}

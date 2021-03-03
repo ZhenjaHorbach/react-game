@@ -1,0 +1,16 @@
+.score {
+	display: flex;
+	text-align: center;
+	justify-content: center;
+}
+
+.text {
+	font-size: 30px;
+	font-family: 'Neucha', cursive;
+	padding: 5px 20px;
+}
+
+.text span {
+	font-weight: bold;
+	padding-left: 10px;
+}
