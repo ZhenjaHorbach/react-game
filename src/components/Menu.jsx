@@ -224,7 +224,7 @@ function Menu(props) {
             deleteSave={props.deleteSave}
           />
         ) : statistics ? (
-          <Statistics lang={props.lang} />
+          <Statistics lang={props.lang} winGamesS={props.winGamesS} />
         ) : settings ? (
           <Settings
             lang={props.lang}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Board from "../components/Board";
 import Menu from "../components/Menu";
 import Score from "../components/Score";
+import WinGame from "../components/WinGame";
 import style from "./Main.module.css";
 
 const allLang = {
@@ -37,7 +38,7 @@ function Main(props) {
 
   //Settings
   const [sizeBoard, setSizeBoard] = useState(
-    +localStorage.getItem("sizeBoard") || 10
+    +localStorage.getItem("sizeBoard") || 4
   );
   const [backgroundGradient, setBackgroundGradient] = useState(
     localStorage.getItem("backgroundGradient") || "one"
@@ -60,6 +61,15 @@ function Main(props) {
 
   //WinGame
   const [winGame, setWinGame] = useState(false);
+  const [winGamesS, setWinGamesS] = useState(
+    JSON.parse(localStorage.getItem("winGames")) || []
+  );
+  const [scopeAuto, setScopeAuto] = useState(
+    +localStorage.getItem("scopeAuto") || 0
+  );
+  const [scopePlayer, setScopePlayer] = useState(
+    +localStorage.getItem("scopePlayer") || 0
+  );
 
   //KeyBoard Move
   const [activeKeyBoard, setActiveKeyBoard] = useState(null);
@@ -118,7 +128,7 @@ function Main(props) {
   }, 500);
 
   useInterval(() => {
-    if (visibilityBoard) {
+    if (visibilityBoard && !winGame) {
       setTimeMove(+timeMove + 1);
       localStorage.setItem("timeMove", timeMove);
     } else {
@@ -183,6 +193,43 @@ function Main(props) {
     localStorage.setItem("saveGames", JSON.stringify(newSave));
   };
 
+  useEffect(() => {
+    if (winGame) {
+      const nowArray = winGamesS;
+      const nowSave = {
+        randomCards: randomCards,
+        findCards: findCard,
+        sizeBoard: sizeBoard,
+        backgroundGradient: backgroundGradient,
+        backgroundColor: backgroundColor,
+        formCard: formCard,
+        scoreMove: scoreMove,
+        timeMove: timeMove,
+        topic: props.topic,
+        auto: autoGame,
+        score: sizeBoard * 200 - timeMove * 15 + scoreMove * 50,
+      };
+      nowArray.push(nowSave);
+      setWinGamesS(nowArray);
+      localStorage.setItem("winGames", JSON.stringify(nowArray));
+      if (autoGame) {
+        const num = scopeAuto + 1;
+        setScopeAuto(num);
+        setTimeout(() => {
+          localStorage.setItem("scopeAuto", num);
+          localStorage.setItem("scopePlayer", scopePlayer);
+        }, 500);
+      } else {
+        const num = scopePlayer + 1;
+        setScopePlayer(num);
+        setTimeout(() => {
+          localStorage.setItem("scopeAuto", scopeAuto);
+          localStorage.setItem("scopePlayer", num);
+        }, 500);
+      }
+    }
+  }, [winGame]);
+
   const loadGame = (index) => {
     props.getImg(saveGames[index].topic);
     setRandomCards(saveGames[index].randomCards);
@@ -235,6 +282,7 @@ function Main(props) {
       scoreMove: scoreMove,
       timeMove: timeMove,
       topic: props.topic,
+      score: sizeBoard * 200 - timeMove * 15 + scoreMove * 50,
     };
     nowArray.push(nowSave);
     setSaveGames(nowArray);
@@ -247,6 +295,11 @@ function Main(props) {
       : setActiveCard([]);
   };
 
+  useEffect(() => {
+    if (findCard.length * 2 === randomCards.length) {
+      createNewGame("ng");
+    }
+  }, []);
   useEffect(() => {
     if (activeCard.length >= 2) {
       if (activeCard[0] === activeCard[1]) {
@@ -426,20 +479,22 @@ function Main(props) {
           backgroundGradient={backgroundGradient}
           loadGame={loadGame}
           deleteSave={deleteSave}
+          winGamesS={winGamesS}
         />
       )}
       {winGame ? (
-        <button
-          onClick={() => {
-            setActiveKeyBoard(null);
-            setNumberKeyBoard(null);
-            setActiveKeyBoard(false);
-            setClickEnter(false);
-            createNewGame("ng");
-          }}
-        >
-          Новая игра
-        </button>
+        <WinGame
+          autoGame={autoGame}
+          lang={props.lang}
+          setActiveKeyBoard={setActiveKeyBoard}
+          setNumberKeyBoard={setNumberKeyBoard}
+          setActiveKeyBoard={setActiveKeyBoard}
+          setClickEnter={setClickEnter}
+          createNewGame={createNewGame}
+          scoreMove={scoreMove}
+          timeMove={timeMove}
+          sizeBoard={sizeBoard}
+        />
       ) : (
         ""
       )}

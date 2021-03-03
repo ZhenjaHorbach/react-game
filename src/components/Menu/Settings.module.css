@@ -271,3 +271,27 @@
 .button_menu:active::after {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), inset -3px 3px 1em rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 940px) {
+	.settings{
+		flex-direction: column;
+		align-items: center;
+	}
+}
+
+@media (max-width: 510px) {
+	.theme{
+		width: 320px;
+	}
+	.find{
+		width: 320px;
+	}
+	
+	.notFind{
+		width: 320px;
+	}
+	
+	.numberCards{
+		width: 320px;
+	}
+}

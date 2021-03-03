@@ -7,14 +7,13 @@
 .loadGame_header{
 	padding: 10px;
 	display: flex;
-	font-size: 15px;
+	font-size: 20px;
 	justify-content: space-between;
 	border: 3px solid rgba(3, 0, 0, 0.171);
-	border-radius: 4px;
 }
 
 .loadGame_header div {
-	width: 11%;
+	width: 13%;
 	text-align: center;
 }
 

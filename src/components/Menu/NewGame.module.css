@@ -89,3 +89,10 @@
 .button_menu:active::after {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), inset -3px 3px 1em rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 510px) {
+
+	.button_menu{
+		width: 300px;
+	}
+}

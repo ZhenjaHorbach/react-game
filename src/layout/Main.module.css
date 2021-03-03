@@ -1,11 +1,10 @@
 .main {
-	margin: 0 10%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	position: relative;
 	width: 900px;
-	margin:0 auto
+	margin:0 auto 100px;
 }
 
 .body_boardAndMenu{
@@ -67,4 +66,24 @@
 }
 .button_menu:active::after {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), inset -3px 3px 1em rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 910px) {
+	.main {
+		width: 700px;
+		margin-bottom: 130px;
+	}
+}
+
+@media (max-width: 710px) {
+	.main {
+		width: 500px;
+		margin-bottom: 130px;
+	}
+}
+
+@media (max-width: 510px) {
+	.main {
+		width: 320px;
+	}
 }

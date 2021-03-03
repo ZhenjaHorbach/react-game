@@ -1,4 +1,4 @@
-import style from "./LoadElement.module.css";
+import style from "./StatisticsElement.module.css";
 
 const allLang = {
   animal: {
@@ -80,28 +80,18 @@ const allLang = {
   },
 };
 
-function LoadElement(props) {
+function StatisticsElement(props) {
   return (
     <div className={style.loadGame_body}>
       <div>{props.index + 1}</div>
       <div>{props.info.sizeBoard}</div>
       <div>{props.info.scoreMove}</div>
       <div>{props.info.timeMove}</div>
-      <div>{props.info.findCards.length}</div>
       <div>{allLang[props.info.topic][props.lang]}</div>
-      <div>{props.info.score}</div>
-      <div>
-        <button onClick={() => props.loadGame(props.index)}>
-          {allLang.load[props.lang]}
-        </button>
-      </div>
-      <div>
-        <button onClick={() => props.deleteSave(props.index)}>
-          {allLang.delete[props.lang]}
-        </button>
-      </div>
+      <div>{props.info.score ? props.info.score : 0}</div>
+      <div>{props.info.auto ? "Auto" : "Player"}</div>
     </div>
   );
 }
 
-export default LoadElement;
+export default StatisticsElement;
